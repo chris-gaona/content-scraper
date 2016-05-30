@@ -4,7 +4,7 @@
 
   //require/import the HTTP module
   var http = require('http');
-  var scraper = require('./scraper.js');
+  var scraper = require('./js/scraper.js');
 
   //define a port to listen to
   var PORT=3000;

@@ -49,6 +49,13 @@
           console.log('Sorry, there was a problem scraping the page you requested.');
 
           //When an error occurs log it to a file scraper-error.log . It should append to the bottom of the file with a time stamp and error e.g. [Tue Feb 16 2016 10:02:12 GMT-0800 (PST)] <error message>
+          var todayDate = new Date();
+          var errorMessage = "[" + todayDate + "] " + err.message + "\n";
+
+          fs.appendFile('scraper-error.log', errorMessage, function (err) {
+            if (err) throw err
+            console.log('The "data to append" was appended to file!');
+          });
         }
       });
 
@@ -59,7 +66,6 @@
   function scrapeProductPage(productURL) {
     var today = new Date();
     var dateString = today.toString();
-    console.log(today.toString());
 
     request(url + productURL, function(err, res, html) {
       var $ = cheerio.load(html);
