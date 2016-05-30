@@ -13,5 +13,8 @@
     "cheerio": "^0.20.0",
     "json2csv": "^3.4.2",
     "request": "^2.72.0"
+  },
+  "devDependencies": {
+    "eslint": "^2.11.1"
   }
 }
