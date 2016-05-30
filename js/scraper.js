@@ -13,21 +13,21 @@
   var url = "http://www.shirts4mike.com/";
   var productArray = [];
 
+  //The scraper should generate a folder called data if it doesn’t exist.
+  function fileExists(filePath) {
+    try {
+      var stats = fs.statSync(filePath);
+      return stats.isDirectory();
+    }
+    catch (err) {
+      return false;
+    }
+  }
+
   function scrape(req, res) {
 
     if (req.url != '/favicon.ico') {
       res.writeHead(200, {'Content-Type': 'text/plain'});
-
-      //The scraper should generate a folder called data if it doesn’t exist.
-      function fileExists(filePath) {
-        try {
-          var stats = fs.statSync(filePath);
-          return stats.isDirectory();
-        }
-        catch (err) {
-          return false;
-        }
-      }
 
       if (!fileExists('data')) {
         fs.mkdir('data');
@@ -53,7 +53,7 @@
           var errorMessage = "[" + todayDate + "] " + err.message + "\n";
 
           fs.appendFile('scraper-error.log', errorMessage, function (err) {
-            if (err) throw err
+            if (err) throw err;
             console.log('The "data to append" was appended to file!');
           });
         }
@@ -75,10 +75,9 @@
         ImageURL: $('img').attr('src'),
         URL: url + productURL,
         Time: dateString
-      }
+      };
 
       productArray.push(productInfo);
-      console.log(productArray);
 
       var yyyy = today.getFullYear();
       var mm = today.getMonth()+1;
