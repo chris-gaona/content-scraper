@@ -7,7 +7,7 @@
   var scraper = require('./scraper.js');
 
   //define a port to listen to
-  const PORT=3000;
+  var PORT=3000;
 
   //this function handles requests and sends responses
   function handleRequest(req, res) {

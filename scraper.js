@@ -7,6 +7,9 @@
   var request = require('request');
   var json2csv = require('json2csv');
 
+  //Use a linting tool like ESLint to check your code for syntax errors and to ensure general code quality. You should be able to run npm run lint to check your code.
+  //run "npm run lint" in the console to check js code
+
   var url = "http://www.shirts4mike.com/";
   var productArray = [];
 
@@ -44,6 +47,8 @@
           //If the site is down, an error message describing the issue should appear in the console.
           console.log(err.message);
           console.log('Sorry, there was a problem scraping the page you requested.');
+
+          //When an error occurs log it to a file scraper-error.log . It should append to the bottom of the file with a time stamp and error e.g. [Tue Feb 16 2016 10:02:12 GMT-0800 (PST)] <error message>
         }
       });
 
