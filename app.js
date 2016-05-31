@@ -2,9 +2,9 @@
 
   'use strict';
 
-  //require/import the HTTP module
-  var http = require('http');
-  var scraper = require('./js/scraper.js');
+  //require/import needed modules
+  var http = require('http'); //http is used to create node.js server
+  var scraper = require('./js/scraper.js'); //scraping functions
 
   //define a port to listen to
   var PORT=3000;
@@ -14,7 +14,7 @@
     scraper.scrape(req, res);
   }
 
-  //create a server
+  //create server
   var server = http.createServer(handleRequest);
 
   //start the server
