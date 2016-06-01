@@ -3,6 +3,7 @@
   'use strict';
 
   //require/import needed modules
+  var colors = require('colors');
   var fs = require('fs'); //file system
   //I chose cheerio as my scraper because it has a fairly recent publishing
   //(4 months) & has a lot of downloads, which means a lot of people are using
@@ -74,7 +75,7 @@
           //if the site is down, an error message describing the issue
           //should appear in the console.
           console.log("ERROR: " + err.message);
-          console.log('Sorry, there was a problem scraping the page you requested.');
+          console.log(colors.red('Sorry, there was a problem scraping the page you requested.'));
 
           //creates new date time stamp
           var todayDate = new Date();
@@ -85,7 +86,7 @@
           //appends to the bottom of the file with a time stamp and error
           fs.appendFile('scraper-error.log', errorMessage, function (err) {
             if (err) throw err;
-            console.log('The "data to append" was appended to the file!');
+            console.log(colors.green('The "data to append" was appended to the file!'));
           });
         } //if statment
       }); //request method
@@ -144,7 +145,7 @@
         fs.writeFile('./data/' + newToday + '.csv', csv, function(err) {
           if (err) throw err;
           //give feedback in the console
-          console.log('File Saved!');
+          console.log(colors.green('File Saved!'));
         });
       });
     });

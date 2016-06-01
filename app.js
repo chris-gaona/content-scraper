@@ -3,6 +3,7 @@
   'use strict';
 
   //require/import needed modules
+  var colors = require('colors'); //colors is used to add color to console
   var http = require('http'); //http is used to create node.js server
   var scraper = require('./js/scraper.js'); //scraping functions
 
@@ -20,7 +21,7 @@
   //start the server
   server.listen(PORT, function(){
     // callback triggered when server is successfully listening.
-    console.log("Server listening on: http://localhost:%s", PORT);
+    console.log(colors.rainbow("Server listening on: http://localhost:" + PORT));
   });
 
 })();
