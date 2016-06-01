@@ -3,7 +3,8 @@
   'use strict';
 
   //require/import needed modules
-  var colors = require('colors');
+  var colors = require('colors'); //colors is used to add color to console
+  var http = require('http'); //http is used to create node.js server
   var fs = require('fs'); //file system
   //I chose cheerio as my scraper because it has a fairly recent publishing
   //(4 months) & has a lot of downloads, which means a lot of people are using
@@ -24,6 +25,14 @@
   //************************
   //run "npm run lint" in the console to check js code using JSHint
   //************************
+
+  //define a port to listen to
+  var PORT=3000;
+
+  //this function handles requests and sends responses
+  function handleRequest(req, res) {
+    scrape(req, res);
+  }
 
   //define other variables
   var url = "http://www.shirts4mike.com/";
@@ -151,7 +160,13 @@
     });
   }
 
-  //exports this module to be called in app.js
-  module.exports.scrape = scrape;
+  //create server
+  var server = http.createServer(handleRequest);
+
+  //start the server
+  server.listen(PORT, function(){
+    // callback triggered when server is successfully listening.
+    console.log(colors.rainbow("Server listening on: http://localhost:" + PORT));
+  });
 
 })();
