@@ -21,7 +21,7 @@
   //and to ensure general code quality.
   //You should be able to run npm run lint to check your code.
   //************************
-  //run "npm run lint" in the console to check js code
+  //run "npm run lint" in the console to check js code using JSHint
   //************************
 
   //define other variables
@@ -85,7 +85,7 @@
           //appends to the bottom of the file with a time stamp and error
           fs.appendFile('scraper-error.log', errorMessage, function (err) {
             if (err) throw err;
-            console.log('The "data to append" was appended to file!');
+            console.log('The "data to append" was appended to the file!');
           });
         } //if statment
       }); //request method
