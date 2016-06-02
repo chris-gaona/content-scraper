@@ -5,17 +5,25 @@
   var colors = require('colors'); // colors is used to add color to console
   var http = require('http'); // http is used to create node.js server
   var fs = require('fs'); // file system
-  // I chose cheerio as my scraper because it has a fairly recent publishing
-  // (4 months) & has a lot of downloads, which means a lot of people are using
-  // it. I really like how cheerio uses jquery style syntax as well.
+  // I chose Cheerio as my scraper because
+  // 1.) Cheerio has a fairly recent publishing (4 months)
+  // 2.) Cheerio has a lot of downloads, which means a lot of people are using it
+  // 3.) Cheerio implements a subset of core jQuery, which is very familiar syntax
+  // 4.) Cheerio can parse nearly any HTML or XML document
   var cheerio = require('cheerio'); // web scraper
-  // I chose request because it made it very simple to make a request to a
-  // specified url & it played well with cheerio. It also has been published
-  // very recently (a month) & has a lot of people using it
+  // I chose Request because
+  // 1.) Request makes it very simple to make a request to a specified url
+  // 2.) Request interacts well with cheerio
+  // 3.) Request also has been published very recently (a month)
+  // 4.) Request has a lot of people using it
   var request = require('request'); // request module to get url
-  // I chose json2csv as my module to create a csv file because it has a very
-  // recent publishing (1 week), lots of people using it, & only 3 issues on
-  // github
+  // I chose json2csv as my module to create a csv file because
+  // 1.) json2csv has a very recent publishing (2 weeks)
+  // 2.) json2csv has lots of people using it
+  // 3.) json2csv has only 3 open issues on github
+  // 4.) json2csv is easy to use...you mainly just have to add the data as an
+  // array of json objects & then add an array of objects/strings to create
+  // the headers in the csv file
   var json2csv = require('json2csv'); // creates csv file
 
   // Use a linting tool like ESLint to check your code for syntax errors
