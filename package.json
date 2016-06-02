@@ -5,7 +5,7 @@
   "repository": "https://github.com/chris-gaona/content-scraper",
   "main": "scraper.js",
   "scripts": {
-    "lint": "eslint **.js || exit 0"
+    "lint": "eslint **.js"
   },
   "author": "Chris Gaona",
   "license": "MIT",

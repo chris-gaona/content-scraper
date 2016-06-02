@@ -30,7 +30,8 @@
   // and to ensure general code quality.
   // You should be able to run npm run lint to check your code.
   // ************************
-  // run "npm run lint" in the console to check js code using JSHint
+  // run "npm run lint" in the console to check js code using eslint
+  // useful link: http://eslint.org/docs/rules/semi
   // ************************
 
   // define a port to listen to

@@ -4,6 +4,6 @@
         "standard"
     ],
     "rules": {
-        "semi": ["off"]
+        "semi": ["error", "always"]
     }
 }
