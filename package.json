@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Content Scraper from Techdegree & Treehouse",
   "repository": "https://github.com/chris-gaona/content-scraper",
-  "main": "app.js",
+  "main": "scraper.js",
   "scripts": {
     "lint": "eslint **.js || exit 0"
   },

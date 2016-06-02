@@ -87,10 +87,6 @@
             scrapeProductPage(productURL);
           });
 
-          // tells the server that the response headers & body have been sent
-          // request has been fulfilled
-          res.end('Consider ' + url + ' scraped!');
-
         } else {
           // if the site is down, an error message describing the issue
           // should appear in the console.
@@ -109,12 +105,12 @@
             console.log(colors.green('The "data to append" was appended to the file!'));
           });
 
-          // tells the server that the response headers & body have been sent
-          // request has been fulfilled
-          res.end('Sorry there was an issue scraping ' + url);
-
         } // if statment
       }); // request method
+
+      // tells the server that the response headers & body have been sent
+      // request has been fulfilled
+      res.end('Consider ' + url + ' scraped!');
 
     } // if favicon statement
   } // scrape()
