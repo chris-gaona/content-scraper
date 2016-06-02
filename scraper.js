@@ -51,8 +51,7 @@
       var stats = fs.statSync(filePath);
       // return true if stats is directory
       return stats.isDirectory();
-    }
-    catch (err) {
+    } catch (err) {
       // return false if does not exist
       return false;
     }
@@ -62,7 +61,7 @@
   function scrape (req, res) {
     // prevents every http request from sending 2 requests --> 1 for data request
     // & 1 for favicon.ico file request
-    if (req.url != '/favicon.ico') {
+    if (req.url !== '/favicon.ico') {
       // sends an HTTP status code and a collection of response headers
       // back to the client
       res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -75,7 +74,7 @@
       // request visits the website http://shirts4mike.com full catalog page
       request(url + 'shirts.php/', function (err, res, html) {
         // if no error in request
-        if (!err && res.statusCode == 200) {
+        if (!err && res.statusCode === 200) {
           // passes html to cheerio to scrape
           var $ = cheerio.load(html);
           // for each list item in full catalog page
@@ -86,7 +85,6 @@
             // argument
             scrapeProductPage(productURL);
           });
-
         } else {
           // if the site is down, an error message describing the issue
           // should appear in the console.
@@ -104,14 +102,11 @@
             if (err) throw err;
             console.log(colors.green('The "data to append" was appended to the file!'));
           });
-
         } // if statment
       }); // request method
-
       // tells the server that the response headers & body have been sent
       // request has been fulfilled
       res.end('Consider ' + url + ' scraped!');
-
     } // if favicon statement
   } // scrape()
 
@@ -124,48 +119,56 @@
 
     // request follows links to each t-shirt page using
     request(url + productURL, function (err, res, html) {
-      // passes html to cheerio to scrape
-      var $ = cheerio.load(html);
-      // scraper gets the price, title, url & image url from the product page
-      // & creates an object for each product page
-      var productInfo = {
-        Title: $('title').html(),
-        Price: $('.price').html(),
-        ImageURL: $('img').attr('src'),
-        URL: url + productURL,
-        Time: dateString
-      };
+      // if no error in request
+      if (!err && res.statusCode === 200) {
+        // passes html to cheerio to scrape
+        var $ = cheerio.load(html);
+        // scraper gets the price, title, url & image url from the product page
+        // & creates an object for each product page
+        var productInfo = {
+          Title: $('title').html(),
+          Price: $('.price').html(),
+          ImageURL: $('img').attr('src'),
+          URL: url + productURL,
+          Time: dateString
+        };
 
-      // pushes each productInfo object into the product array
-      productArray.push(productInfo);
+        // pushes each productInfo object into the product array
+        productArray.push(productInfo);
 
-      // year
-      var yyyy = today.getFullYear();
-      // month
-      var mm = today.getMonth() + 1;
-      // day
-      var dd = today.getDate();
-      // format date specified in instructions: 2016-01-29.csv
-      var newToday = yyyy + '-' + mm + '-' + dd;
+        // year
+        var yyyy = today.getFullYear();
+        // month
+        var mm = today.getMonth() + 1;
+        // day
+        var dd = today.getDate();
+        // format date specified in instructions: 2016-01-29.csv
+        var newToday = yyyy + '-' + mm + '-' + dd;
 
-      // column headers should be in in this order Title, Price,
-      // ImageURL, URL and Time. Time should be the current date time of
-      // when the scrape happened
+        // column headers should be in in this order Title, Price,
+        // ImageURL, URL and Time. Time should be the current date time of
+        // when the scrape happened
 
-      // creates fields/headers to be added to csv file
-      var fields = ['Title', 'Price', 'ImageURL', 'URL', 'Time'];
+        // creates fields/headers to be added to csv file
+        var fields = ['Title', 'Price', 'ImageURL', 'URL', 'Time'];
 
-      // uses a third party npm package to create a CSV file
-      json2csv({data: productArray, fields: fields}, function (err, csv) {
-        if (err) console.log(err);
+        // uses a third party npm package to create a CSV file
+        json2csv({data: productArray, fields: fields}, function (err, csv) {
+          if (err) console.log(err);
 
-        // writes to proper file, overwriting what is there, if anything
-        fs.writeFile('./data/' + newToday + '.csv', csv, function (err) {
-          if (err) throw err;
-          // give feedback in the console
-          console.log(colors.green('File Saved!'));
+          // writes to proper file, overwriting what is there, if anything
+          fs.writeFile('./data/' + newToday + '.csv', csv, function (err) {
+            if (err) throw err;
+            // give feedback in the console
+            console.log(colors.green('File Saved!'));
+          });
         });
-      });
+      } else {
+        // if the site is down, an error message describing the issue
+        // should appear in the console.
+        console.log('ERROR: ' + err.message);
+        console.log(colors.red('Sorry, there was a problem scraping the page you requested.'));
+      }
     });
   }
 
