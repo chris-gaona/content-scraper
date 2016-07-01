@@ -6,10 +6,22 @@
 
 /** require/import needed modules */
 /** colors is used to add color to console */
+/**
+* Requires colors npm module
+* @requires colors
+*/
 var colors = require('colors');
 /** http is used to create node.js server */
+/**
+* Requires http module
+* @requires http
+*/
 var http = require('http');
 /** file system */
+/**
+* Requires fs module
+* @requires fs
+*/
 var fs = require('fs');
 /**
 * I chose Cheerio as my scraper because
@@ -18,6 +30,10 @@ var fs = require('fs');
 * 3.) Cheerio implements a subset of core jQuery, which is very familiar syntax
 * 4.) Cheerio can parse nearly any HTML or XML document
 */
+/**
+* Requires cheerio npm module
+* @requires cheerio
+*/
 var cheerio = require('cheerio'); /** web scraper */
 /**
 * I chose Request because
@@ -25,6 +41,10 @@ var cheerio = require('cheerio'); /** web scraper */
 * 2.) Request interacts well with cheerio
 * 3.) Request also has been published very recently (a month)
 * 4.) Request has a lot of people using it
+*/
+/**
+* Requires request npm module
+* @requires request
 */
 var request = require('request'); /** request module to get url */
 /**
@@ -35,6 +55,10 @@ var request = require('request'); /** request module to get url */
 * 4.) json2csv is easy to use...you mainly just have to add the data as an
 * array of json objects & then add an array of objects/strings to create
 * the headers in the csv file
+*/
+/**
+* Requires json2csv npm module
+* @requires json2csv
 */
 var json2csv = require('json2csv');
 
@@ -182,7 +206,17 @@ function scrapeProductPage (productURL) {
       // day
       var dd = today.getDate();
       // format date specified in instructions: 2016-01-29.csv
-      var newToday = yyyy + '-' + mm + '-' + dd;
+      var newToday;
+      // adds zero to month & day if they are less than 10
+      if (mm < 10 && dd < 10) {
+        newToday = yyyy + '-' + '0' + mm + '-' + '0' + dd;
+      // adds zero to month if it is less than 10
+      } else if (mm < 10) {
+        newToday = yyyy + '-' + '0' + mm + '-' + dd;
+        // adds zero to day if it is less than 10
+      } else if (dd < 10) {
+        newToday = yyyy + '-' + mm + '-' + '0' + dd;
+      }
 
       // column headers should be in in this order Title, Price,
       // ImageURL, URL and Time. Time should be the current date time of
