@@ -11,12 +11,6 @@
 * @requires colors
 */
 var colors = require('colors');
-/** http is used to create node.js server */
-/**
-* Requires http module
-* @requires http
-*/
-var http = require('http');
 /** file system */
 /**
 * Requires fs module
@@ -62,25 +56,12 @@ var request = require('request'); /** request module to get url */
 */
 var json2csv = require('json2csv');
 
-// define a port to listen to
-var PORT = 3000;
-
-/**
-* handles the request with requests and responses
-* @function
-* @param req - request from client
-* @param res - response to client
-*/
-function handleRequest (req, res) {
-  scrape(req, res);
-}
-
 // define other variables
 var url = 'http://www.shirts4mike.com/';
 var productArray = [];
 
 /**
-* checks to see if passed in argument exists
+* checks to see if passed in argument exists in the file system
 * @function
 * @param {string} filePath - path of file in directory to check
 * @returns {boolean} returns true or false
@@ -97,73 +78,94 @@ function fileExists (filePath) {
 }
 
 /**
-* creates scrape function and passes in request & response
+* creates a new date string using the required format
 * @function
-* @param req - request from client
-* @param res - response to client
+* @returns {string} returns today's date in the required format
 */
-function scrape (req, res) {
-  /**
-  * prevents every http request from sending 2 requests --> 1 for data request
-  * & 1 for favicon.ico file request
-  */
-  if (req.url !== '/favicon.ico') {
-    /**
-    * sends an HTTP status code and a collection of response headers
-    * back to the client
-    */
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+function todaysDate () {
+  /** creates new date time stamp */
+  var today = new Date();
+  // year
+  var yyyy = today.getFullYear();
+  // month
+  var mm = today.getMonth() + 1;
+  // day
+  var dd = today.getDate();
+  // format date specified in instructions: 2016-01-29.csv
+  var newToday;
+  // adds zero to month & day if they are less than 10
+  if (mm < 10 && dd < 10) {
+    newToday = yyyy + '-' + '0' + mm + '-' + '0' + dd;
+  // adds zero to month if it is less than 10
+  } else if (mm < 10) {
+    newToday = yyyy + '-' + '0' + mm + '-' + dd;
+    // adds zero to day if it is less than 10
+  } else if (dd < 10) {
+    newToday = yyyy + '-' + mm + '-' + '0' + dd;
+  }
 
-    /** generate a folder called data if it doesn’t exist */
-    if (!fileExists('data')) {
-      fs.mkdir('data');
-    }
+  // returns newToday variable
+  return newToday;
+}
 
-    /** request visits the website http://shirts4mike.com full catalog page */
-    request(url + 'shirts.php/', function (err, res, html) {
-      /** if no error in request */
-      if (!err && res.statusCode === 200) {
-        /** passes html to cheerio to scrape */
-        var $ = cheerio.load(html);
-        /** for each list item in full catalog page */
-        $('ul.products li').each(function () {
-          /** gets product url for each list item */
-          var productURL = $(this).find('a').attr('href');
-          /**
-          * following function scrapes product pages & passes in url as the
-          * argument
-          */
-          scrapeProductPage(productURL);
-        });
-      } else {
+// Gets the scraping going by calling the scrape function
+scrape();
+
+/**
+* creates scrape function to start the scrape processes
+* @function
+*/
+function scrape () {
+  /** generate a folder called data if it doesn’t exist */
+  if (!fileExists('data')) {
+    fs.mkdir('data');
+  }
+
+  /** request visits the website http://shirts4mike.com full catalog page */
+  request(url + 'shirts.php/', function (err, res, html) {
+    /** if no error in request */
+    if (!err && res.statusCode === 200) {
+      /** passes html to cheerio to scrape */
+      var $ = cheerio.load(html);
+      /** for each list item in full catalog page */
+      $('ul.products li').each(function () {
+        /** gets product url for each list item */
+        var productURL = $(this).find('a').attr('href');
         /**
-        * if the site is down, an error message describing the issue
-        * should appear in the console.
+        * following function scrapes product pages & passes in url as the
+        * argument
         */
-        console.log('ERROR: ' + err.message);
-        console.log(colors.red('Sorry, there was a problem scraping the page you requested.'));
+        scrapeProductPage(productURL);
+      });
 
-        /** creates new date time stamp */
-        var todayDate = new Date();
-        /** creates error message to add to log file */
-        var errorMessage = '[' + todayDate + '] ' + err.message + '\n';
+      // creates today date value in proper format by calling todaysDate function
+      var todayDateValue = todaysDate();
 
-        /**
-        * when an error occurs log it to a file scraper-error.log
-        * appends to the bottom of the file with a time stamp and error
-        */
-        fs.appendFile('scraper-error.log', errorMessage, function (err) {
-          if (err) throw err;
-          console.log(colors.green('The "data to append" was appended to the file!'));
-        });
-      } /** if statment */
-    }); /** request method */
-    /**
-    * tells the server that the response headers & body have been sent
-    * request has been fulfilled
-    */
-    res.end('Consider ' + url + ' scraped!');
-  } /** if favicon statement */
+      // give feedback in the console
+      console.log(colors.green('The csv file data/' + todayDateValue + '.csv was successfully saved!'));
+    } else {
+      /**
+      * if the site is down, an error message describing the issue
+      * should appear in the console.
+      */
+      console.log('ERROR: ' + err.message);
+      console.log(colors.red('Sorry, there was a problem scraping the page you requested.'));
+
+      /** creates new date time stamp */
+      var todayDate = new Date();
+      /** creates error message to add to log file */
+      var errorMessage = '[' + todayDate + '] ' + err.message + '\n';
+
+      /**
+      * when an error occurs log it to a file scraper-error.log
+      * appends to the bottom of the file with a time stamp and error
+      */
+      fs.appendFile('scraper-error.log', errorMessage, function (err) {
+        if (err) throw err;
+        console.log(colors.green('The error data was appended to the scraper-error.log file!'));
+      });
+    } /** if statment */
+  }); /** request method */
 } /** scrape() */
 
 /**
@@ -199,24 +201,8 @@ function scrapeProductPage (productURL) {
       // pushes each productInfo object into the product array
       productArray.push(productInfo);
 
-      // year
-      var yyyy = today.getFullYear();
-      // month
-      var mm = today.getMonth() + 1;
-      // day
-      var dd = today.getDate();
-      // format date specified in instructions: 2016-01-29.csv
-      var newToday;
-      // adds zero to month & day if they are less than 10
-      if (mm < 10 && dd < 10) {
-        newToday = yyyy + '-' + '0' + mm + '-' + '0' + dd;
-      // adds zero to month if it is less than 10
-      } else if (mm < 10) {
-        newToday = yyyy + '-' + '0' + mm + '-' + dd;
-        // adds zero to day if it is less than 10
-      } else if (dd < 10) {
-        newToday = yyyy + '-' + mm + '-' + '0' + dd;
-      }
+      // creates today date value in proper format by calling todaysDate function
+      var newToday = todaysDate();
 
       // column headers should be in in this order Title, Price,
       // ImageURL, URL and Time. Time should be the current date time of
@@ -232,8 +218,6 @@ function scrapeProductPage (productURL) {
         // writes to proper file, overwriting what is there, if anything
         fs.writeFile('./data/' + newToday + '.csv', csv, function (err) {
           if (err) throw err;
-          // give feedback in the console
-          console.log(colors.green('File Saved!'));
         });
       });
     } else {
@@ -246,12 +230,3 @@ function scrapeProductPage (productURL) {
     }
   });
 }
-
-// create server
-var server = http.createServer(handleRequest);
-
-// start the server
-server.listen(PORT, function () {
-  // callback triggered when server is successfully listening.
-  console.log(colors.rainbow('Server listening on: http://localhost:' + PORT));
-});

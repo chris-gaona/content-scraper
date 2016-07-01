@@ -3,3 +3,6 @@
 [Wed Jun 01 2016 18:47:15 GMT-0700 (PDT)] getaddrinfo ENOTFOUND www.shirts4miked.com www.shirts4miked.com:80
 [Wed Jun 01 2016 18:47:52 GMT-0700 (PDT)] getaddrinfo ENOTFOUND www.shirts4miked.com www.shirts4miked.com:80
 [Wed Jun 01 2016 18:49:36 GMT-0700 (PDT)] getaddrinfo ENOTFOUND www.shirts4miked.com www.shirts4miked.com:80
+[Fri Jul 01 2016 08:25:21 GMT-0700 (PDT)] Invalid URI "undefinedshirts.php/"
+[Fri Jul 01 2016 09:19:41 GMT-0700 (PDT)] Exceeded maxRedirects. Probably stuck in a redirect loop http://www.shirts4mike.com/shirt.php/shirts.php
+[Fri Jul 01 2016 09:20:17 GMT-0700 (PDT)] getaddrinfo ENOTFOUND www.shirts4miked.com www.shirts4miked.com:80
